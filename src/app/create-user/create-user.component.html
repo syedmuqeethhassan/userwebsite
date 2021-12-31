@@ -1,0 +1,66 @@
+<div style="float:left;">
+    <button type="button" class="btn btn-secondary" [routerLink]="['/dashboard']"
+        routerLinkActive="router-link-active">go to dashboard</button>
+
+</div>
+
+<div class="formStyling">
+    <form [formGroup]="createUserForm" (ngSubmit)="onSubmit()">
+
+
+        <div style="width: 60%;">
+            <label for="email">email </label>
+            <input type="email" id="email" name="email" formControlName="email" class="form-control"
+                id="exampleInputEmail1">
+        </div>
+
+        <div *ngIf="createUserForm.get('email')?.hasError('email')">
+            invalid email
+        </div>
+
+
+        <div *ngIf="createUserForm.get('email')?.dirty && createUserForm.get('email')?.hasError('required')">
+            this feild is required
+        </div>
+
+
+        <div style="width: 60%;">
+            <label for="password">password </label>
+            <input type="text" id="password" name="password" formControlName="password" class="form-control"
+                id="exampleInputEmail1">
+        </div>
+
+        <div *ngIf="createUserForm.get('password')?.dirty && createUserForm.get('password')?.hasError('required')">
+            this feild is required
+        </div>
+
+        <div *ngIf="createUserForm.get('password')?.hasError('maxlength')">
+            invalid name
+        </div>
+        <div *ngIf="createUserForm.get('password')?.dirty && createUserForm.get('password')?.hasError('minlength')">
+            invalid name
+        </div>
+
+        <div style="margin-top: 15px;">
+            <button type="button" (click)="onSubmit()" class="btn btn-secondary">submit</button>
+        </div>
+    </form>
+
+    <div *ngIf="isSuccess==true">
+        your generated id is {{successDataReceived.id}}
+    </div>
+    <div *ngIf="isSuccess==true">
+        your generated token is {{successDataReceived.token}}
+    </div>
+    <ngb-toast class="toastSuccess" [autohide]="false" [delay]="5000" *ngIf="isSuccess" id='gfg'
+         header='great!'>
+        user created successfully
+    </ngb-toast>
+    <ngb-toast class="toastFailure" [autohide]="false" [delay]="5000" *ngIf="isFailure" id='gfg'
+         header='oh no!'>
+        <div>unsuccesful register</div>
+        <div>
+        {{this.errorResponse}}
+    </div>
+    </ngb-toast>
+</div>

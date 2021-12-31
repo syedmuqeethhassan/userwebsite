@@ -1,0 +1,159 @@
+
+<div class="home">
+	<div class="homeStyle">
+		<!-- {{this.apidata|json}} -->
+		USER MANAGEMENT DASHBOARD
+		
+		<div class="heading">
+			<button type="button" class="btn btn-outline-primary" [routerLink]="['/create-user']"
+				routerLinkActive="router-link-active">create new user</button>
+		</div>
+	</div>
+
+	<div *ngIf="!apidata">
+		<div class="d-flex align-items-center">
+			<strong>Loading...</strong>
+			<div class="spinner-border ml-auto" role="status" aria-hidden="true"></div>
+		</div>
+	</div>
+
+	<div class="container-people">
+		<ng-container *ngIf="apidata">
+			<div *ngFor="let userDetails of apidata.data">
+				<div class="card" style="width: 18rem;">
+					<img class="card-img-top" src="{{userDetails.avatar}}" alt="Card image cap">
+					<div style="width: 100%;height:20px ;margin-top:5px; border: none;display: flex;">
+						<div style="border: noneblack;margin-left:2px;width: 33%;height:16px ;text-align: center;">
+							<button type="button" (click)="singleUserDetails(userDetails)"
+								class="btn btn-link" style="border: none;">view</button>
+
+						</div>
+						<div style="border: none;margin-left:20px ;width: 33%;height:16px ;text-align: center;">
+							<button type="button" (click)="fetchCurrentUserData(userDetails)"
+								class="btn btn-link" style="border: none;">edit</button>
+						</div>
+					</div>
+					<div class="card-body" style="margin-top: 5px;">
+
+						<div class="card-text">
+							<div style="display: flex;">
+								<div style="width: 50%;">
+									First Name
+								</div>
+								<div style="width: 50%;">
+									{{userDetails.first_name}}
+								</div>
+							</div>
+							<div style="display: flex;">
+								<div style="width: 50%;">
+									Last Name
+								</div>
+								<div style="width: 50%;">
+									{{userDetails.last_name}}
+								</div>
+							</div>
+							<div style="display: flex;">
+								<div style="width: 50%;">
+									Email
+								</div>
+								<div style="width: 50%;">
+									{{userDetails.email|emailPipe}}
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</ng-container>
+
+		<div *ngIf="showModal" class="modal" tabindex="-1" role="dialog">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title" id="exampleModalLabel">update user</h5>
+						<button type="button" class="close" data-dismiss="modal" (click)="closeModal()"
+							aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+					</div>
+					
+						<form [formGroup]="updateUserForm">
+							<div class="modal-body">
+
+								<div>
+									<label for="name">name </label>
+									<input type="text" id="name" name="name" formControlName="name" class="form-control"
+										id="exampleInputEmail1">
+								</div>
+
+								<div *ngIf="updateUserForm.get('name')?.hasError('pattern')">
+									invalid name
+								</div>
+
+
+								<div
+									*ngIf="updateUserForm.get('name')?.dirty && updateUserForm.get('name')?.hasError('required')">
+									the name feild is required
+								</div>
+
+
+								<div>
+									<label for="job">job </label>
+									<input type="text" id="job" name="job" formControlName="job" class="form-control"
+										id="exampleInputEmail1">
+								</div>
+
+								<div
+									*ngIf="updateUserForm.get('job')?.dirty && updateUserForm.get('job')?.hasError('required')">
+									this feild is required
+								</div>
+
+							</div>
+							<div class="modal-footer">
+
+								<div  style="margin-right: 60px;" *ngIf="userUpdateResponse">
+									updated at <br>
+									{{userUpdateResponse.updatedAt}}
+								</div>
+
+
+								<button type="button" class="btn btn-primary" (click)="editUserDetails(currentUser.id)"
+									[disabled]="updateUserForm.get('name')?.hasError('required') || updateUserForm.get('job')?.hasError('required')">Save
+									changes</button>
+							</div>
+							
+						</form>
+						
+					
+				</div>
+
+			</div>
+
+		</div>
+		<div *ngIf="singleUserModal">
+		<div class="modal " tabindex="-1" role="dialog">
+			<div class="modal-dialog modal-lg">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title" id="exampleModalLabel">User data</h5>
+						<button type="button" class="close" data-dismiss="modal"
+							(click)="closeSingleUserViewModal()" aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+					</div>
+					<div class="modal-body">
+						<div>
+						  
+							<app-pop-up></app-pop-up>
+							
+						 
+							
+						</div>
+					</div>
+					<div class="modal-footer">
+		
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
